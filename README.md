@@ -1,107 +1,116 @@
-# Aho–Corasick Algorithm for Efficient Multi-Pattern Searching in Cybersecurity Systems
+# Aho–Corasick Algorithm for Efficient Multi-Pattern Searching in Cybersecurity Logs
 
-## 📌 Project Overview
+## Project Overview
 
-This project implements the **Aho–Corasick algorithm in Python** to efficiently search for multiple suspicious keywords in cybersecurity logs. Security systems often need to analyze large volumes of text to identify potential threats, malware signatures, and suspicious activities. Searching for each keyword separately can be inefficient because the same text may need to be scanned multiple times.
+Cybersecurity logs contain a mix of routine events, warnings, and possible threats. Finding useful information in these logs becomes harder as the amount of data grows. Searching for each keyword separately also means reading the same text repeatedly.
 
-The Aho–Corasick algorithm addresses this problem by constructing a pattern-matching automaton using a Trie and failure links, enabling multiple patterns to be detected during a single scan of the input text.
+This project uses the **Aho–Corasick algorithm in Python** to search for multiple keywords in a single pass. It builds a Trie to store the patterns and uses failure links to keep the search moving when a character does not match the current path.
 
-This project demonstrates the practical application of advanced data structures and algorithms in cybersecurity.
+The project demonstrates how data structures and algorithms can support a practical security task: locating keywords in logs so that relevant entries can be reviewed.
 
-## 🎯 Objectives
+## Objectives
 
-- Implement the Aho–Corasick algorithm using Python.
-- Understand the role of Tries and failure links in multi-pattern searching.
-- Detect multiple keywords in cybersecurity logs efficiently.
-- Identify overlapping pattern matches.
-- Analyze time and space complexity.
-- Demonstrate the algorithm through interactive test cases.
+The project aims to:
 
-## 🧠 Data Structures and Algorithms Used
+- Build a working implementation of the Aho–Corasick algorithm.
+- Explain how Tries, failure links, and output lists work together.
+- Search cybersecurity logs for several keywords at once.
+- Detect overlapping patterns.
+- Display match positions and occurrence counts.
+- Explore the algorithm’s time and space requirements.
+- Demonstrate its behaviour through interactive examples.
 
-### 1. Trie
+## How the Algorithm Works
 
-A Trie stores patterns character by character. Common prefixes are shared between patterns, reducing redundant storage and providing the structure for efficient pattern matching.
+### 1. Storing Keywords in a Trie
 
-### 2. Failure Links
+The first step is to insert the keywords into a Trie. Each path through the Trie represents a pattern, with one character stored at each step.
 
-Failure links connect each state to an appropriate fallback state. When a character cannot continue the current path, the algorithm follows these links instead of restarting the search from the root.
+Patterns with the same beginning share part of their path. For example, **he** and **hers** share the nodes for **h** and **e**. This keeps common prefixes together and provides the structure used during searching.
 
-### 3. Output Lists
+### 2. Building Failure Links
 
-Each Trie node maintains a list of patterns that end at that state. Patterns inherited through failure links allow the algorithm to identify suffix matches and overlapping occurrences.
+A search will sometimes reach a character that cannot continue the current path. Failure links tell the algorithm where to continue from that point.
 
-### 4. Queue and Breadth-First Search (BFS)
+Each link leads to the longest suffix of the current path that is also a prefix of a stored pattern. This allows the algorithm to reuse what it has already matched without scanning earlier text again.
 
-Python's `deque` is used as a queue to construct failure links level by level.
+### 3. Recording Matches
 
-## ⚙️ Features
+Output lists identify the patterns that end at each state. They also include relevant matches reached through failure links.
 
-- Interactive input for multiple suspicious keywords.
-- Predefined cybersecurity log or custom text input.
-- Trie construction with duplicate and empty-pattern handling.
-- Failure-link construction using BFS.
-- Multi-pattern searching in a single text scan.
-- Detection of overlapping matches.
-- Optional case-insensitive searching.
-- Reporting of matched keywords and their start and end positions.
-- Occurrence counting and summary generation.
-- Time-complexity information.
+This matters when several patterns end at the same position. For example, matching **she** can also produce a match for **he**.
 
-## 🛠️ Technologies Used
+### 4. Using Breadth-First Search
 
-- **Programming Language:** Python 3
-- **Data Structures:** Trie, queue, dictionaries, lists, and sets
-- **Algorithm:** Aho–Corasick string matching
-- **Libraries:** Python standard library (`collections.deque`)
+Failure links are constructed level by level using breadth-first search.
 
-No external Python packages are required.
+The program uses Python’s `collections.deque` as a queue for this process. Processing shallower nodes first ensures that the fallback information needed by deeper nodes is already available.
 
-## 🚀 How to Run
+## Features
 
-### Prerequisites
+The program supports:
 
-Install Python 3 on your computer.
+- **Multiple keywords:** Enter several patterns separated by commas.
+- **Flexible input:** Search the sample cybersecurity log or provide custom text.
+- **Case options:** Choose whether matching should ignore letter case.
+- **Overlapping matches:** Find patterns that share characters or occur within other patterns.
+- **Match positions:** View where each occurrence begins and ends.
+- **Occurrence summaries:** See how often each keyword appears.
+- **Input handling:** Handle duplicate and empty pattern entries.
+- **Complexity information:** Review the main time and space costs.
 
-### Steps
+## Technologies Used
 
-1. Clone the repository:
+The project is written in **Python 3** and uses the **Aho–Corasick string-matching algorithm**.
 
-   ```bash
-   git clone https://github.com/YOUR-USERNAME/aho-corasic-cybersecurity-scanner.git
-   ```
+Its main data structures are a Trie, dictionaries, lists, sets, and a queue. The queue is provided by Python’s standard library through `collections.deque`.
 
-2. Navigate to the project directory:
+**No external Python packages are required.**
 
-   ```bash
-   cd aho-corasic-cybersecurity-scanner
-   ```
+## Getting Started
 
-3. Run the Python program:
+Make sure Python 3 is installed on your computer.
 
-   ```bash
-   python aho_corasick_cybersecurity_demo.py
-   ```
+### Step 1: Clone the Repository
 
-4. Enter suspicious keywords separated by commas.
+Replace `YOUR-USERNAME` with the GitHub username of the repository owner:
 
-5. Choose either the sample cybersecurity log or custom text.
+```bash
+git clone https://github.com/YOUR-USERNAME/aho-corasic-cybersecurity-scanner.git
+```
 
-6. Select whether to ignore letter case and view the matching results.
+### Step 2: Open the Project Folder
 
-Replace `YOUR-USERNAME` with the GitHub account that owns the repository. Ensure the repository name in the commands matches the actual name.
+```bash
+cd aho-corasic-cybersecurity-scanner
+```
 
-## 🧪 Example Demonstration
+The repository and folder names should match the actual project.
 
-### Test Case 1: Cybersecurity Log
+### Step 3: Run the Program
 
-**Patterns:**
+```bash
+python aho_corasick_cybersecurity_demo.py
+```
+
+### Step 4: Try a Search
+
+Once the program starts:
+
+1. Enter your keywords, separated by commas.
+2. Choose the sample log or enter your own text.
+3. Select whether to ignore letter case.
+4. Review the matches and occurrence summary.
+
+## Example 1: Searching a Cybersecurity Log
+
+Suppose we want to check a log for these keywords:
 
 ```text
 malware, attack, login, virus, bad
 ```
 
-**Sample input text:**
+The sample log contains:
 
 ```text
 INFO user login successful; WARNING suspicious login detected;
@@ -109,93 +118,135 @@ ALERT malware found; blocked attack from unknown host;
 INFO system scan complete.
 ```
 
-**Expected matches:**
+### What the Scanner Found
 
-| Keyword | Start index | End index (exclusive) | Occurrences |
-|---|---:|---:|---:|
-| login | 10 | 15 | 1 |
-| login | 47 | 52 | 1 |
-| malware | 69 | 76 | 1 |
-| attack | 92 | 98 | 1 |
+The scanner detects **4 matches across 3 keywords**.
 
-The program reports four total matches: two occurrences of `login`, one of `malware`, and one of `attack`.
+- **login** appears twice, at positions **10–15** and **47–52**.
+- **malware** appears once, at positions **69–76**.
+- **attack** appears once, at positions **92–98**.
 
-### Test Case 2: Overlapping Patterns
+No matches are found for **virus** or **bad**.
 
-**Patterns:**
+*Positions start at zero, and the end position is excluded from each range. These values assume that each displayed line break is represented by one newline character.*
+
+### Understanding the Results
+
+The matches help identify entries worth reviewing, but their meaning depends on the surrounding text.
+
+For example, **login** appears in both a successful login message and a suspicious login warning. The keyword search locates both entries; further analysis is needed to decide which events require attention.
+
+## Example 2: Finding Overlapping Patterns
+
+Some patterns overlap or appear inside other patterns. To demonstrate this, consider the following keywords:
 
 ```text
 he, she, hers
 ```
 
-**Input text:**
+The input text is:
 
 ```text
 ushers
 ```
 
-**Expected matches:**
+### What the Scanner Found
 
-| Pattern | Start index | End index (exclusive) |
-|---|---:|---:|
-| she | 1 | 4 |
-| he | 2 | 4 |
-| hers | 2 | 6 |
+The scanner detects **3 matches**:
 
-This test demonstrates how failure links and inherited output lists enable overlapping patterns to be detected.
+- **she** at positions **1–4**.
+- **he** at positions **2–4**.
+- **hers** at positions **2–6**.
 
-## ⏱️ Complexity Analysis
+The same position convention applies: the start is included, and the end is excluded.
 
-Let:
+### Why This Example Matters
 
-- **P** = Total number of characters across all patterns.
-- **N** = Number of characters in the input text.
-- **Z** = Total number of matches reported.
+The pattern **he** appears within **she**, while **hers** begins at the same position as **he** and continues further.
 
-| Operation | Time Complexity |
-|---|---|
-| Trie construction | O(P), expected |
-| Failure-link construction | O(P) under standard bounded-alphabet analysis |
-| Text searching | O(N + Z) |
-| Overall algorithm | O(P + N + Z) |
+Failure links and output information allow the algorithm to report all three matches during the same scan.
 
-The overall bound excludes additional sorting of the results. The implementation sorts reported matches before displaying them, which can add O(Z log Z) time.
+## Time and Space Complexity
 
-The Trie and automaton require O(P) space. Storing the reported matches requires O(Z) additional space.
+The analysis uses three values:
 
-## 🌐 Applications
+- **P:** The total number of characters across all patterns.
+- **N:** The number of characters in the input text.
+- **Z:** The number of matches reported.
 
-The algorithm can be applied to:
+### Preparing the Patterns
 
-- Cybersecurity log scanning.
-- Suspicious keyword detection.
-- Malware signature matching.
-- Spam filtering.
-- Text search engines.
-- DNA sequence pattern matching.
+Building the Trie takes **O(P)** expected time when dictionary-based transitions are used.
 
-**Note:** This project is an educational prototype for literal keyword detection. It is not a complete production-grade intrusion-detection system.
+Under the standard bounded-alphabet analysis, failure-link construction also takes **O(P)** time. The exact preprocessing cost depends on how transitions and inherited output information are represented.
 
-## 👥 Team Contributions
+### Searching the Text
 
-The project is divided into four technical responsibilities:
+Searching takes **O(N + Z)** time. The algorithm scans the text and reports each match it finds.
 
-- **Member 1 — Trie Construction:** Implements Trie nodes, pattern insertion, and shared-prefix handling.
-- **Member 2 — Failure Links:** Implements BFS-based failure-link construction and inherited output lists.
-- **Member 3 — Pattern Matching:** Implements text scanning, failure transitions, match detection, and position calculation.
-- **Member 4 — Integration and Output:** Implements interactive input, sample logs, case handling, occurrence summaries, and output formatting.
+Under the standard construction assumptions, this gives a total core running time of:
 
-Each member is responsible for understanding and demonstrating their assigned implementation.
+```text
+O(P + N + Z)
+```
 
-## 📚 References
+### Formatting the Results
 
-1. Aho, A. V., and Corasick, M. J. (1975). *Efficient String Matching: An Aid to Bibliographic Search.* Communications of the ACM, 18(6), 333–340. https://doi.org/10.1145/360825.360855
-2. National Institute of Standards and Technology (NIST). *Aho-Corasick Algorithm.* Dictionary of Algorithms and Data Structures. https://xlinux.nist.gov/dads/HTML/ahoCorasick.html
+The implementation sorts matches before displaying them. This can add **O(Z log Z)** time.
 
-## 📄 License
+Copying inherited output lists can also add preprocessing work, depending on the implementation.
 
-No license has been selected for this repository. Unless a license is added, others generally do not have permission to reuse, modify, or distribute the project beyond applicable legal exceptions.
+### Memory Usage
+
+The Trie structure requires **O(P)** space. Storing the reported matches requires another **O(Z)**.
+
+Output information can require additional memory, particularly when inherited pattern lists are copied between nodes.
+
+## Applications
+
+Aho–Corasick is useful when many known patterns need to be found in the same text. Its applications include:
+
+- Scanning cybersecurity logs.
+- Detecting suspicious keywords.
+- Matching text-based malware signatures.
+- Filtering spam.
+- Supporting text search systems.
+- Finding patterns in DNA sequences.
+
+This project is an educational keyword scanner. It demonstrates multi-pattern matching, but interpreting security events requires additional context and analysis.
+
+## Team Contributions
+
+The work is divided into four technical responsibilities.
+
+### Member 1: Trie Construction
+
+Builds the Trie nodes, inserts patterns, and handles shared prefixes. This member explains how the keywords are stored before searching begins.
+
+### Member 2: Failure Links
+
+Constructs failure links using breadth-first search and manages inherited output information. This member explains how the algorithm continues after a mismatch.
+
+### Member 3: Pattern Matching
+
+Implements text scanning, follows failure transitions, detects matches, and calculates their positions.
+
+### Member 4: Integration and Output
+
+Connects the components and handles user input, sample logs, case options, occurrence summaries, and result formatting.
+
+Each member should understand their assigned component and explain how it contributes to the complete program.
+
+## References
+
+1. Aho, A. V., and Corasick, M. J. (1975). *Efficient String Matching: An Aid to Bibliographic Search.* Communications of the ACM, 18(6), 333–340. [Read the paper](https://doi.org/10.1145/360825.360855).
+
+2. National Institute of Standards and Technology. *Aho-Corasick Algorithm.* Dictionary of Algorithms and Data Structures. [View the reference](https://xlinux.nist.gov/dads/HTML/ahoCorasick.html).
+
+## License
+
+A license has not yet been added to this repository. Reuse permissions should be clarified with the project owner.
 
 ---
 
-**Developed as a Data Structures and Algorithms (DSA) case study demonstrating efficient multi-pattern searching using the Aho–Corasick algorithm.**
+*Developed as a Data Structures and Algorithms case study on efficient multi-pattern searching.*
